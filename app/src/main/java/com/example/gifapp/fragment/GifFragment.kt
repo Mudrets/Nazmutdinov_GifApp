@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import coil.size.Scale
@@ -35,116 +36,161 @@ class GifFragment : Fragment() {
     ): View {
         _binding = FragmentGifBinding.inflate(inflater, container, false)
 
-        binding.nextBtn?.setOnClickListener {
-            viewModel.nextGif()
-        }
+        setBtnClickListener()
+        setObserver()
+        setDefaultState()
 
-        binding.backBtn?.setOnClickListener {
-            viewModel.prevGif()
-        }
+        return binding.root
+    }
 
-        binding.refreshBtn?.setOnClickListener {
-            viewModel.refresh()
+    private fun setDefaultState() {
+        binding.apply {
+            progressBar?.visibility = View.GONE
+            refreshBtn?.visibility = View.GONE
+            image?.visibility = View.VISIBLE
+            nextBtn?.isEnabled = true
+            setVisibilityToContent(View.VISIBLE)
+            setVisibilityToWarning(View.GONE)
         }
+    }
 
+    private fun setLoadingState() {
+        binding.apply {
+            setDefaultState()
+            setVisibilityToContentAndImage(View.GONE)
+            setVisibilityToWarning(View.GONE)
+            progressBar?.visibility = View.VISIBLE
+            nextBtn?.isEnabled = false
+        }
+    }
+
+    private fun setVisibilityToWarning(visibility: Int) = binding.apply {
+        warningIcon?.visibility = visibility
+        warningMsg?.visibility = visibility
+    }
+
+    private fun setVisibilityToContent(visibility: Int) = binding.apply {
+        author?.visibility = visibility
+        description?.visibility = visibility
+    }
+
+    private fun setVisibilityToContentAndImage(visibility: Int) = binding.apply {
+        setVisibilityToContent(visibility)
+        image?.visibility = visibility
+    }
+
+    private fun setErrorState() = binding.apply {
+        setVisibilityToWarning(View.VISIBLE)
+        setVisibilityToContentAndImage(View.GONE)
+        refreshBtn?.visibility = View.VISIBLE
+        progressBar?.visibility = View.GONE
+    }
+
+    private fun setGifLoadingErrorState() = binding.apply {
+        setVisibilityToWarning(View.VISIBLE)
+        progressBar?.visibility = View.GONE
+        warningMsg?.text = getString(R.string.gif_error)
+        refreshBtn?.visibility = View.VISIBLE
+    }
+
+    private fun setObserver() {
         viewModel.state.observe(viewLifecycleOwner) {
             when (it) {
                 is GifState.SuccessState -> onSuccess(it.gif!!, it.hasPrev)
                 is GifState.ErrorState<*> -> {
                     when (it.msg) {
-                        is Int -> onError(it.msg)
-                        is String -> onError(it.msg)
+                        is Int -> onError(it.msg, it.hasPrev)
+                        is String -> onError(it.msg, it.hasPrev)
                     }
                 }
                 is GifState.LoadState -> onLoading()
             }
         }
+    }
 
-        binding.progressBar?.visibility = View.GONE
-        binding.refreshBtn?.visibility = View.GONE
+    private fun setBtnClickListener() {
+        binding.apply {
+            nextBtn?.setOnClickListener { viewModel.nextGif() }
+            backBtn?.setOnClickListener { viewModel.prevGif() }
+            refreshBtn?.setOnClickListener { viewModel.refresh() }
+        }
+    }
 
-        return binding.root
+    private fun setPageInfo() {
+        val pageInfoArg = arguments?.getParcelable<PageInfo>(ARG_PAGE_INFO)
+        if (pageInfoArg != null)
+            pageInfo = pageInfoArg
+    }
+
+    private fun getGifViewModel(
+        repository: Repository
+    ): GifViewModel = if (pageInfo.pageSection == PageSection.RANDOM) {
+        val viewModelFactory = RandomGifViewModelFactory(repository)
+        ViewModelProvider(this, viewModelFactory).get(RandomGifViewModel::class.java)
+    } else {
+        val viewModelFactory = GifFromSectionViewModelFactory(repository, pageInfo.pageSection)
+        ViewModelProvider(this, viewModelFactory)
+            .get(GifFromSectionViewModel::class.java)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val pageInfoArg = arguments?.getParcelable<PageInfo>(ARG_PAGE_INFO)
-        if (pageInfoArg != null)
-            pageInfo = pageInfoArg
-        val repository = Repository()
-        val viewModelFactory: ViewModelProvider.Factory
-        viewModel = if (pageInfo.pageSection == PageSection.RANDOM) {
-            viewModelFactory = RandomGifViewModelFactory(repository)
-            ViewModelProvider(this, viewModelFactory).get(RandomGifViewModel::class.java)
-        } else {
-            viewModelFactory = GifFromSectionViewModelFactory(repository, pageInfo.pageSection)
-            ViewModelProvider(this, viewModelFactory)
-                .get(GifFromSectionViewModel::class.java)
-        }
-
+        setPageInfo()
+        viewModel = getGifViewModel(Repository())
         viewModel.initialize()
     }
+
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
 
+    private fun setContent(author: String, content: String) = binding.apply {
+        setVisibilityToContent(View.VISIBLE)
+        nextBtn?.isEnabled = true
+        description?.text = content
+        this.author?.text = getString(R.string.author_name, author)
+    }
+
+    private fun loadGif(gifUrl: String) = binding.apply {
+        image?.load(gifUrl) {
+            crossfade(true)
+            crossfade(300)
+            scale(Scale.FILL)
+            listener(
+                onSuccess = { _, _ -> setDefaultState() },
+                onError = { _, _ -> setGifLoadingErrorState() }
+            )
+        }
+    }
+
     private fun onSuccess(gif: Gif, hasPrev: Boolean) {
         binding.apply {
             progressBar?.visibility = View.VISIBLE
-            description?.visibility = View.VISIBLE
-            author?.visibility = View.VISIBLE
-            warningMsg?.visibility = View.GONE
-            warningIcon?.visibility = View.GONE
-            refreshBtn?.visibility = View.GONE
-            nextBtn?.isEnabled = true
-            description?.text = gif.description
-            author?.text = getString(R.string.author_name, gif.author)
-            image?.load(gif.gifUrl) {
-                crossfade(true)
-                crossfade(300)
-                scale(Scale.FILL)
-                listener(onSuccess = { _, _ ->
-                    progressBar?.visibility = View.GONE
-                    image?.visibility = View.VISIBLE
-                },
-                    onError = { request, throwable ->
-                        onError(throwable.message ?: "Проверьте свое подключение к интернету")
-                    })
-            }
-            nextBtn?.isEnabled = true
+            setContent(gif.author, gif.description)
+            setVisibilityToWarning(View.GONE)
+            loadGif(gif.gifUrl)
             backBtn?.isEnabled = hasPrev
         }
     }
 
-    private fun onError(msg: Int) {
-        onError(activity?.resources?.getString(msg) ?: "")
+    private fun onError(msg: Int, hasPrev: Boolean) {
+        onError(
+            activity?.resources?.getString(msg) ?: getString(R.string.unknown_error),
+            hasPrev
+        )
     }
 
-    private fun onError(msg: String) {
-        binding.warningMsg?.visibility = View.VISIBLE
-        binding.warningIcon?.visibility = View.VISIBLE
-        binding.refreshBtn?.visibility = View.VISIBLE
-        binding.progressBar?.visibility = View.GONE
-        binding.description?.visibility = View.GONE
-        binding.author?.visibility = View.GONE
-        binding.warningMsg?.text = msg
+    private fun onError(msg: String, hasPrev: Boolean) = binding.apply {
+        setErrorState()
+        warningMsg?.text = msg
+        backBtn?.isEnabled = hasPrev
     }
 
     private fun onLoading() {
-        binding.apply {
-            binding.refreshBtn?.visibility = View.GONE
-            warningMsg?.visibility = View.GONE
-            warningIcon?.visibility = View.GONE
-            progressBar?.visibility = View.VISIBLE
-            description?.visibility = View.GONE
-            author?.visibility = View.GONE
-            nextBtn?.isEnabled = false
-            image?.visibility = View.GONE
-
-        }
+        setLoadingState()
     }
 
     companion object {

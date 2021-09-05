@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.gifapp.R
 import com.example.gifapp.fragment.PageInfo
 import com.example.gifapp.fragment.PageSection
 import com.example.gifapp.model.Gif
@@ -40,7 +41,7 @@ class GifFromSectionViewModel(
 
     override fun prevGif() {
         if (hasPrev()) {
-            val i = if(lastWasFail) index else --index
+            val i = if (lastWasFail) index else --index
             currGif = prevGifs[i]
             lastWasFail = false
             setNormalState()
@@ -61,6 +62,36 @@ class GifFromSectionViewModel(
             setNormalState()
     }
 
+    private fun successLoad(responseWrapper: ResponseWrapper) {
+        prevGifs.addAll(responseWrapper.result)
+        lastWasFail = false
+        currGif = prevGifs[++index]
+        nextPage++
+        setNormalState()
+    }
+
+    private fun isSuccessResponse(
+        response: Response<ResponseWrapper>,
+        responseWrapper: ResponseWrapper?
+    ) = response.code() == 200 && responseWrapper != null &&
+                !responseWrapper.result.isNullOrEmpty()
+
+    private fun onResponse(response: Response<ResponseWrapper>) {
+        val responseWrapper = response.body()
+        if (isSuccessResponse(response, responseWrapper))
+            successLoad(responseWrapper!!)
+        else if (responseWrapper != null && responseWrapper.result.isNullOrEmpty())
+            onFail(R.string.collection_of_gifs_is_null)
+        else
+            onFail(R.string.connection_error)
+    }
+
+    private fun onFailure() {
+        currGif = null
+        lastWasFail = true
+        onFail(R.string.connection_error)
+    }
+
     private fun loadGifs() {
         _state.postValue(GifState.LoadState)
         val response = repository.getGif(pageSection.value, nextPage)
@@ -69,37 +100,19 @@ class GifFromSectionViewModel(
             override fun onResponse(
                 call: Call<ResponseWrapper>,
                 response: Response<ResponseWrapper>
-            ) {
-                val responseWrapper = response.body()
-                if (response.code() == 200 && responseWrapper != null &&
-                    !responseWrapper.result.isNullOrEmpty()
-                ) {
-                    prevGifs.addAll(responseWrapper.result)
-                    lastWasFail = false
-                    currGif = prevGifs[++index]
-                    nextPage++
-                    setNormalState()
-                } else if(responseWrapper != null && responseWrapper.result.isNullOrEmpty()) {
-                    onFail("Gif изображений в этой категории нет")
-                } else
-                    onFail()
-            }
+            ) = onResponse(response)
 
-            override fun onFailure(call: Call<ResponseWrapper>, t: Throwable) {
-                currGif = null
-                lastWasFail = true
-                onFail(t.message ?: "Возникла ошибка")
-            }
+            override fun onFailure(call: Call<ResponseWrapper>, t: Throwable) = onFailure()
         })
     }
 
-    private fun onFail(msg: String = "Возникла ошибка") {
-        _state.postValue(GifState.ErrorState(msg))
+    private fun onFail(msg: Int) {
+        _state.postValue(GifState.ErrorState(msg, hasPrev()))
     }
 
     private fun setNormalState() = when {
         index >= 0 -> _state.postValue(GifState.SuccessState(currGif, hasPrev()))
-        else -> _state.postValue(GifState.ErrorState("Какая-то проблема"))
+        else -> _state.postValue(GifState.ErrorState(R.string.unknown_error, hasPrev()))
     }
 
     private fun hasPrev() = index > 0 && prevGifs.isNotEmpty()

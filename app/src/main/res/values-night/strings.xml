@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gif_error">Неудалось заргузить гифку</string>
+    <string name="unknown_error">Незивестная ошибка. Проверьте свое подключение к интернету</string>
+</resources>

@@ -12,4 +12,8 @@
     <string name="tab_top">top</string>
     <string name="tab_latest">latest</string>
     <string name="tab_hot">hot</string>
+    <string name="gif_error">Неудалось заргузить гифку</string>
+    <string name="unknown_error">Незивестная ошибка. Проверьте свое подключение к интернету</string>
+    <string name="connection_error">Проверьте свое интернет соединение</string>
+    <string name="collection_of_gifs_is_null">Gif изображений в этой категории нет</string>
 </resources>
