@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">GifApp</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="back_btn_text">Назад</string>
+    <string name="next_btn_text">Далее</string>
+    <string name="description_image_gif">gif image</string>
+    <string name="author_name">Автор: %s</string>
+    <string name="lorem_ipsum_50">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum sit amet commodo metus, quis imperdiet risus. In id semper diam, a convallis est. Donec rhoncus laoreet eleifend. Etiam nec mi urna. Sed a arcu tristique, vestibulum ante a, dictum sapien. Mauris eu vehicula odio. Duis aliquam ultricies tellus. Maecenas aliquet.</string>
+    <string name="lorem_ipsum_20">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque efficitur lorem a sagittis posuere. In ac quam consequat, venenatis velit.</string>
+    <string name="tab_random">random</string>
+    <string name="tab_top">top</string>
+    <string name="tab_latest">latest</string>
+    <string name="tab_hot">hot</string>
+</resources>
