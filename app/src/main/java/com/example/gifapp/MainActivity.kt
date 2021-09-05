@@ -9,6 +9,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 
 class MainActivity : AppCompatActivity() {
 
+    //Из документации
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 

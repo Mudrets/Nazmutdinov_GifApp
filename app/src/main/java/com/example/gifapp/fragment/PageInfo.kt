@@ -2,12 +2,13 @@ package com.example.gifapp.fragment
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.gifapp.model.PageSection
 
 /**
  * Информция о странице. Реализует [Parcelable].
  *
- * @param resourceId - string ресурс на название страницы.
- * @param pageSection - тип страницы.
+ * @param resourceId ресурс на название страницы.
+ * @param pageSection тип страницы.
  */
 class PageInfo(val resourceId: Int, val pageSection: PageSection) : Parcelable {
     constructor(parcel: Parcel) : this(

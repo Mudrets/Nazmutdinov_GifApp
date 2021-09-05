@@ -12,6 +12,7 @@ import coil.request.CachePolicy
 
 class MyApp : Application(), ImageLoaderFactory {
     override fun newImageLoader(): ImageLoader {
+        //Для Coil
         return ImageLoader.Builder(applicationContext)
             .crossfade(true)
             .diskCachePolicy(CachePolicy.ENABLED)

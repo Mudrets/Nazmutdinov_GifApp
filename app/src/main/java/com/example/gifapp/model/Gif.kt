@@ -4,6 +4,9 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
 
+/**
+ * Модель для хранения информации о gif-изображении
+ */
 data class Gif(
     val id: Int,
     val description: String,

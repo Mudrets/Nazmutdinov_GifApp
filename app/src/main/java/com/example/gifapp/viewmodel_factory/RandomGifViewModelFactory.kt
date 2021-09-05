@@ -5,6 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gifapp.repository.Repository
 import com.example.gifapp.viewmodel.RandomGifViewModel
 
+/**
+ * Фабрика для создания экземпляра [RandomGifViewModel]
+ */
 class RandomGifViewModelFactory(
     private val repository: Repository
 ) : ViewModelProvider.Factory {
