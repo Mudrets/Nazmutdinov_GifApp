@@ -2,13 +2,13 @@
     <!-- Base application theme. -->
     <style name="Theme.GifApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_200</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/primaryColor</item>
+        <item name="colorPrimaryVariant">@color/primaryDarkColor</item>
+        <item name="colorOnPrimary">@color/primaryDarkColor</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_200</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/secondaryColor</item>
+        <item name="colorSecondaryVariant">@color/secondaryDarkColor</item>
+        <item name="colorOnSecondary">@color/primaryDarkColor</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
@@ -16,12 +16,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <!-- TabLayout Theme -->
+<!-- TabLayout Theme -->
     <style name="Theme.GifApp.TabLayout" parent="Widget.Design.TabLayout">
-        <item name="tabIndicatorColor">@color/secondaryColor</item>
+        <item name="tabIndicatorColor">@color/primaryDarkColor</item>
         <item name="tabIndicatorHeight">4dp</item>
         <item name="tabTextAppearance">@style/Theme.GifApp.TabLayout.TextAppearance</item>
-        <item name="tabSelectedTextColor">@color/secondaryColor</item>
+        <item name="tabSelectedTextColor">@color/primaryDarkColor</item>
     </style>
 
     <!-- PopupMenu Theme -->
@@ -31,13 +31,12 @@
 
     <!-- Pregerences Theme -->
     <style name="Theme.GifApp.Preferences" parent="Theme.AppCompat">
-        <item name="android:background">@color/primaryLightColor</item>
+        <item name="android:background">@color/primaryDarkColor</item>
     </style>
 
     <!-- TabLayout TextAppearance -->
     <style name="Theme.GifApp.TabLayout.TextAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textSize">12sp</item>
-        <item name="color">@color/white</item>
     </style>
 
     <!-- No ActionBar Theme -->

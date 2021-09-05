@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/author"
-        android:textColor="#232323" />
+        android:textColor="@color/black_light" />
 
     <TextView
         android:id="@+id/author"
@@ -42,7 +42,7 @@
         android:fontFamily="@font/rubik_bold"
         tools:text="James Wilson"
         android:textSize="20sp"
-        android:textColor="#232323"
+        android:textColor="@color/black_light"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -101,6 +101,7 @@
         android:layout_marginHorizontal="40dp"
         android:gravity="center"
         android:textColor="@color/black_light"
+        android:backgroundTint="@color/white"
         android:visibility="gone"
         />
 
