@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.gifapp.repository.Repository
 import com.example.gifapp.viewmodel.RandomGifViewModel
 
-class GifViewModelFactory(
+class RandomGifViewModelFactory(
     private val repository: Repository
 ) : ViewModelProvider.Factory {
 

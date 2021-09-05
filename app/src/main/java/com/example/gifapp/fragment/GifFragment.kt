@@ -14,10 +14,12 @@ import com.example.gifapp.R
 import com.example.gifapp.databinding.FragmentGifBinding
 import com.example.gifapp.model.Gif
 import com.example.gifapp.repository.Repository
-import com.example.gifapp.viewmodel.GifState
+import com.example.gifapp.state.GifState
+import com.example.gifapp.viewmodel.GifFromSectionViewModel
 import com.example.gifapp.viewmodel.GifViewModel
 import com.example.gifapp.viewmodel.RandomGifViewModel
-import com.example.gifapp.viewmodel_factory.GifViewModelFactory
+import com.example.gifapp.viewmodel_factory.GifFromSectionViewModelFactory
+import com.example.gifapp.viewmodel_factory.RandomGifViewModelFactory
 
 class GifFragment : Fragment() {
 
@@ -25,15 +27,13 @@ class GifFragment : Fragment() {
     private var _binding: FragmentGifBinding? = null
     private val binding
         get() = _binding!!
+    var pageInfo = PageInfo(R.string.tab_random, PageSection.RANDOM)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGifBinding.inflate(inflater, container, false)
-        val pageInfo = arguments?.getParcelable<PageInfo>(ARG_PAGE_INFO)
-
-
 
         binding.nextBtn?.setOnClickListener {
             viewModel.nextGif()
@@ -69,9 +69,20 @@ class GifFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val pageInfoArg = arguments?.getParcelable<PageInfo>(ARG_PAGE_INFO)
+        if (pageInfoArg != null)
+            pageInfo = pageInfoArg
         val repository = Repository()
-        val viewModelFactory = GifViewModelFactory(repository)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(RandomGifViewModel::class.java)
+        val viewModelFactory: ViewModelProvider.Factory
+        viewModel = if (pageInfo.pageSection == PageSection.RANDOM) {
+            viewModelFactory = RandomGifViewModelFactory(repository)
+            ViewModelProvider(this, viewModelFactory).get(RandomGifViewModel::class.java)
+        } else {
+            viewModelFactory = GifFromSectionViewModelFactory(repository, pageInfo.pageSection)
+            ViewModelProvider(this, viewModelFactory)
+                .get(GifFromSectionViewModel::class.java)
+        }
+
         viewModel.initialize()
     }
 
@@ -99,9 +110,9 @@ class GifFragment : Fragment() {
                     progressBar?.visibility = View.GONE
                     image?.visibility = View.VISIBLE
                 },
-                onError = { request, throwable ->
-                    onError(throwable.message ?: "Проверьте свое подключение к интернету")
-                })
+                    onError = { request, throwable ->
+                        onError(throwable.message ?: "Проверьте свое подключение к интернету")
+                    })
             }
             nextBtn?.isEnabled = true
             backBtn?.isEnabled = hasPrev
@@ -143,7 +154,7 @@ class GifFragment : Fragment() {
             pageInfo: Parcelable
         ): GifFragment {
             return GifFragment().apply {
-                arguments = bundleOf (ARG_PAGE_INFO to pageInfo)
+                arguments = bundleOf(ARG_PAGE_INFO to pageInfo)
             }
         }
     }

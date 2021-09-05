@@ -7,16 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.gifapp.model.Gif
 import com.example.gifapp.repository.Repository
+import com.example.gifapp.state.GifState
 import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-
-sealed class GifState {
-    object LoadState : GifState()
-    class SuccessState(val gif: Gif?, val hasPrev: Boolean) : GifState()
-    class ErrorState<T>(val msg: T) : GifState()
-}
 
 class RandomGifViewModel(private val repository: Repository) : ViewModel(), GifViewModel {
 
@@ -27,6 +22,7 @@ class RandomGifViewModel(private val repository: Repository) : ViewModel(), GifV
     private var currGif: Gif? = null
     private val prevGifs = mutableListOf<Gif>()
     private var index = -1
+    private var currPage = 0
     private val _state = MutableLiveData<GifState>()
 
     private fun loadGif() {
@@ -60,9 +56,9 @@ class RandomGifViewModel(private val repository: Repository) : ViewModel(), GifV
     }
 
     override fun nextGif() {
-        if (index == prevGifs.size - 1) {
+        if (!hasNext()) {
             loadGif()
-        } else if (index < prevGifs.size - 1) {
+        } else {
             currGif = prevGifs[++index]
             setNormalState()
         }
@@ -85,6 +81,8 @@ class RandomGifViewModel(private val repository: Repository) : ViewModel(), GifV
     }
 
     private fun hasPrev() = index > 0 && prevGifs.isNotEmpty()
+
+    private fun hasNext() = index < prevGifs.size - 1
 
     private fun setNormalState() = when {
         index >= 0 -> _state.postValue(GifState.SuccessState(currGif, hasPrev()))

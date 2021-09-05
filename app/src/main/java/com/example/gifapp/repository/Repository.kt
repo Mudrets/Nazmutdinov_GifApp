@@ -7,4 +7,7 @@ import retrofit2.Response
 class Repository {
 
     fun getGif() = RetrofitInstance.api.getRandomGif()
+
+    fun getGif(category: String, page: Int) =
+        RetrofitInstance.api.getGif(category, page)
 }

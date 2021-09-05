@@ -1,6 +1,7 @@
 package com.example.gifapp.viewmodel
 
 import androidx.lifecycle.LiveData
+import com.example.gifapp.state.GifState
 
 interface GifViewModel {
     val state: LiveData<GifState>
