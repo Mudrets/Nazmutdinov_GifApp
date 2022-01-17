@@ -27,32 +27,32 @@
 
 ### *Загрузка гифки*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838548-78cf085d-3c7b-4c5d-9b0e-59f686cf784e.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838548-78cf085d-3c7b-4c5d-9b0e-59f686cf784e.png" height="600">
 
 ### *Отображение загруженной гифки*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838697-da4ea071-af0f-4fd2-b263-5b07d5bc80ac.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838697-da4ea071-af0f-4fd2-b263-5b07d5bc80ac.png" height="600">
 
 ### *Сообщение о том, что в категории отсутствиют гифки*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838725-741c1076-bfec-460b-b2fa-c776257a7d43.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838725-741c1076-bfec-460b-b2fa-c776257a7d43.png" height="600">
 
 ### *Сообщение об ошибке загрузки*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838741-be41807c-2fc5-4faa-b546-b06acfb8126c.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838741-be41807c-2fc5-4faa-b546-b06acfb8126c.png" height="600">
 
 ### *Сообщение об ошибке загрузки при перевернутом телефоне*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838762-4e3517ec-1896-4d51-aae7-76a7961475a5.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838762-4e3517ec-1896-4d51-aae7-76a7961475a5.png" width="600">
 
 ### *Сообщение об ошибке загрузки гифки и сообщения к ней при перевернутом телефоне*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838777-68791a01-a6c0-4176-b4f4-47de1f0a7e5e.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838777-68791a01-a6c0-4176-b4f4-47de1f0a7e5e.png" width="100">
 
 ### *Отображение гифки при перевернутом телефоне*:
 
-![image](https://user-images.githubusercontent.com/53127411/149839408-82816d90-d88a-49ad-9bbf-bc22edaf9d0f.png)
+<img src="https://user-images.githubusercontent.com/53127411/149839408-82816d90-d88a-49ad-9bbf-bc22edaf9d0f.png" width="600">
 
 ### *Светлая тема*:
 
-![image](https://user-images.githubusercontent.com/53127411/149838799-c66f3216-d546-4f8c-b6ce-3c65f937fb6a.png)
+<img src="https://user-images.githubusercontent.com/53127411/149838799-c66f3216-d546-4f8c-b6ce-3c65f937fb6a.png" height="600">
