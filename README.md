@@ -47,7 +47,7 @@
 
 ### *Сообщение об ошибке загрузки гифки и сообщения к ней при перевернутом телефоне*:
 
-<img src="https://user-images.githubusercontent.com/53127411/149838777-68791a01-a6c0-4176-b4f4-47de1f0a7e5e.png" width="100">
+<img src="https://user-images.githubusercontent.com/53127411/149838777-68791a01-a6c0-4176-b4f4-47de1f0a7e5e.png" width="600">
 
 ### *Отображение гифки при перевернутом телефоне*:
 
